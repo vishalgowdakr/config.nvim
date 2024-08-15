@@ -579,9 +579,17 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        -- tsserver = {
+        --   filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'html', 'htmldjango' },
+        -- },
         --
-
+        -- oxlint = {
+        --   filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'html', 'htmldjango' },
+        --   root_dir = function(fname)
+        --     return util.root_pattern('tsconfig.json', 'jsconfig.json', 'package.json', 'manage.py', '.git')(fname) or util.path.dirname(fname)
+        --   end,
+        -- },
+        --
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -648,7 +656,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, htmldjango = true, html = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -919,3 +927,13 @@ local lspconfig = require 'lspconfig'
 lspconfig.htmx.setup {
   filetypes = { 'html', 'templ' },
 }
+
+lspconfig.emmet_language_server.setup {
+  filetypes = { 'html', 'templ', 'jsx', 'tsx' },
+}
+
+-- User defined keymaps
+vim.keymap.set('n', '<leader>tt', ':tabnew<CR>')
+vim.keymap.set('n', '<leader>tn', ':tabnext<CR>')
+vim.keymap.set('n', '<leader>tp', ':tabprevious<CR>')
+vim.keymap.set('n', '<leader>tc', ':tabclose<CR>')
